@@ -9,7 +9,7 @@ app = FastAPI()
 
 @app.get("/")
 def read_root():
-    return {"message": "Hello, FastAPI!"}
+    return {"message": "Hello, ABINGGGG!"}
 
 @app.get("/hello/{name}")
 def say_hello(name: str):

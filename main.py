@@ -4,6 +4,7 @@ import tensorflow as tf
 from tensorflow.keras.models import load_model
 from tensorflow.keras.preprocessing.sequence import pad_sequences
 import pickle
+import os
 
 # --- Load Model ---
 model = load_model('model/best_lstm_model_300dim_final.h5')
@@ -37,9 +38,15 @@ def predict_emotion(request: TextRequest):
 
     pred = model.predict(padded)
     pred_class = pred.argmax(axis=1)[0]
-    emotion = le.inverse_transform([pred_class])[0]  # ← Decode angka ke label asli
+    emotion = le.inverse_transform([pred_class])[0]  # Decode angka ke label asli
 
     return {
         "input_text": text,
         "predicted_emotion": emotion
     }
+
+# --- Untuk Deployment di Railway, pakai PORT dari Environment ---
+if __name__ == "__main__":
+    import uvicorn
+    port = int(os.environ.get("PORT", 8000))
+    uvicorn.run("main:app", host="0.0.0.0", port=port, reload=True)
